@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { nextTick } from "vue";
 import axios from "axios";
 
 export type TopStories = {
@@ -24,57 +25,83 @@ export type NewStories = {
   url: string;
 };
 
+export type SingleStory = {
+  by: string;
+  descendants: number;
+  id: number;
+  kids?: Array<number>;
+  score: number;
+  time: number;
+  title: string;
+  type: string;
+  url: string;
+};
+
 export const useStore = defineStore("stories", {
   state: () => ({
     topStories: [] as TopStories[],
     newStories: [] as NewStories[],
+    singleStory: {} as SingleStory,
+    comments: [],
   }),
   actions: {
-    fetchTopStories(pageNumber: number) {
-      axios
-        .get<Array<string>>(
+    async fetchTopStories(pageNumber: number) {
+      try {
+        const { data } = await axios.get<Array<string>>(
           "https://hacker-news.firebaseio.com/v0/topstories.json"
-        )
-        .then((resp) => {
-          const results = resp.data.slice(
-            pageNumber * 30,
-            pageNumber === 0 ? 30 : pageNumber * 30 * 2
+        );
+        console.log(data);
+        const results = data.slice(
+          pageNumber * 30,
+          pageNumber === 0 ? 30 : pageNumber * 30 * 2
+        );
+
+        results.forEach(async (element: string) => {
+          const response = await axios.get(
+            `https://hacker-news.firebaseio.com/v0/item/${element}.json`
           );
-          results.forEach((element: string) => {
-            axios
-              .get(`https://hacker-news.firebaseio.com/v0/item/${element}.json`)
-              .then((result) => {
-                this.topStories.push(result.data);
-              })
-              .catch((err) => {
-                console.log(err);
-              });
-          });
-        })
-        .catch((err) => {
-          console.log(err);
+          this.topStories.push(response.data);
         });
+      } catch (e) {
+        console.log(e);
+      }
     },
-    fetchNewStories() {
-      axios
-        .get("https://hacker-news.firebaseio.com/v0/newstories.json")
-        .then((resp) => {
-          const results = resp.data.slice(0, 25);
-          results.forEach((element: string) => {
-            axios
-              .get(`https://hacker-news.firebaseio.com/v0/item/${element}.json`)
-              .then((result) => {
-                this.newStories.push(result.data);
-              })
-              .catch((err) => {
-                console.log(err);
-              });
-          });
-        })
-        .catch((err) => {
-          /* eslint-disable */
-          console.log(err);
+    async fetchNewStories() {
+      try {
+        const { data } = await axios.get<Array<string>>(
+          "https://hacker-news.firebaseio.com/v0/newstories.json"
+        );
+
+        const results = data.slice(0, 25);
+
+        results.forEach(async (element: string) => {
+          const response = await axios.get(
+            `https://hacker-news.firebaseio.com/v0/item/${element}.json`
+          );
+          this.newStories.push(response.data);
         });
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    async fetchSingleStories(params: string) {
+      try {
+        const response = await axios.get(
+          `https://hacker-news.firebaseio.com/v0/item/${params}.json`
+        );
+        this.singleStory = response.data;
+        this.singleStory.kids?.forEach(async (id) => {
+          const response = await axios.get(
+            `https://hacker-news.firebaseio.com/v0/item/${id}.json`
+          );
+          nextTick(
+            // @ts-ignore
+            this.comments.push(response.data)
+          );
+        });
+      } catch (e) {
+        console.log(e);
+      }
     },
   },
 });
