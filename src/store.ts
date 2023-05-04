@@ -43,6 +43,7 @@ export const useStore = defineStore("stories", {
     newStories: [] as NewStories[],
     singleStory: {} as SingleStory,
     comments: [],
+    error: "",
   }),
   actions: {
     async fetchTopStories(pageNumber: number) {
@@ -50,7 +51,6 @@ export const useStore = defineStore("stories", {
         const { data } = await axios.get<Array<string>>(
           "https://hacker-news.firebaseio.com/v0/topstories.json"
         );
-        console.log(data);
         const results = data.slice(
           pageNumber * 30,
           pageNumber === 0 ? 30 : pageNumber * 30 * 2
@@ -63,6 +63,7 @@ export const useStore = defineStore("stories", {
           this.topStories.push(response.data);
         });
       } catch (e) {
+        this.error = `${e}`;
         console.log(e);
       }
     },
@@ -82,6 +83,7 @@ export const useStore = defineStore("stories", {
         });
       } catch (e) {
         console.log(e);
+        this.error = `${e}`;
       }
     },
     async fetchSingleStories(params: string) {
@@ -100,6 +102,7 @@ export const useStore = defineStore("stories", {
           );
         });
       } catch (e) {
+        this.error = `${e}`;
         console.log(e);
       }
     },
