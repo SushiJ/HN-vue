@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { RouterLink } from "vue-router";
 import { TopStories, NewStories } from "../store";
 
 const props = defineProps<{
@@ -8,10 +9,10 @@ const props = defineProps<{
 
 <template>
   <div>
-    <router-link :to="{ path: '/story/' + props.result.id }">{{
+    <RouterLink :to="{ path: '/story/' + props.result.id }">{{
       props.result.title
-    }}</router-link
-    ><br />
+    }}</RouterLink>
+    <br />
     <span>{{ props.result.score }}</span>
     <span>
       by {{ props.result.by }} | {{ props.result.time }} Ago |

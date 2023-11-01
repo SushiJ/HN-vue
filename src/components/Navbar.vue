@@ -12,6 +12,7 @@
   background-color: #e17842;
   margin-bottom: 0.5rem;
 }
+
 .pure-menu a {
   color: white;
   padding-right: 1rem;

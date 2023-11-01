@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useStore } from "../store";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Item from "./Item.vue";
 
@@ -14,15 +14,20 @@ let error = store.error;
 let results = store.topStories;
 
 onMounted(() => store.fetchTopStories(page.value as number));
-function nextPage() {
-  // @ts-ignore
-  page.value++;
+
+watch(page, () => {
   router.push({ query: { page: page.value } });
   results = [];
   store.topStories = [];
   store.fetchTopStories(page.value as number);
   results = store.topStories;
+});
+
+function nextPage() {
+  // @ts-ignore
+  page.value++;
 }
+
 </script>
 <template>
   <div class="container">
@@ -44,5 +49,6 @@ button {
   color: white;
   margin-top: 0.25rem;
   border-radius: 0.25rem;
+  cursor: pointer;
 }
 </style>

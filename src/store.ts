@@ -53,7 +53,7 @@ export const useStore = defineStore("stories", {
         );
         const results = data.slice(
           pageNumber * 30,
-          pageNumber === 0 ? 30 : pageNumber * 30 * 2
+          pageNumber === 0 ? 30 : pageNumber * 30 + 30
         );
 
         results.forEach(async (element: string) => {
