@@ -1,0 +1,11 @@
+{
+  "plugins": [
+    "@stylistic"
+  ],
+  "extends": [
+    "plugin:vue/vue3-recommended"
+  ],
+  "rules": {
+    "@stylistic/semi": "error"
+  }
+}

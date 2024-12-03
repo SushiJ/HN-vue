@@ -1,48 +1,14 @@
 import { defineStore } from "pinia";
 import { nextTick } from "vue";
 import axios from "axios";
-
-export type TopStories = {
-  by: string;
-  descendants: number;
-  id: number;
-  kids: Array<number>;
-  score: number;
-  time: number;
-  title: string;
-  type: string;
-  url: string;
-};
-
-export type NewStories = {
-  by: string;
-  descendants: number;
-  id: number;
-  score: number;
-  time: number;
-  title: string;
-  type: string;
-  url: string;
-};
-
-export type SingleStory = {
-  by: string;
-  descendants: number;
-  id: number;
-  kids?: Array<number>;
-  score: number;
-  time: number;
-  title: string;
-  type: string;
-  url: string;
-};
+import { NewStories, SingleStory, TopStories } from "./types";
 
 export const useStore = defineStore("stories", {
   state: () => ({
     topStories: [] as TopStories[],
     newStories: [] as NewStories[],
     singleStory: {} as SingleStory,
-    comments: [],
+    comments: [] as Array<any>,
     error: "",
   }),
   actions: {
@@ -55,7 +21,6 @@ export const useStore = defineStore("stories", {
           pageNumber * 30,
           pageNumber === 0 ? 30 : pageNumber * 30 + 30,
         );
-
         results.forEach(async (element: string) => {
           const response = await axios.get(
             `https://hacker-news.firebaseio.com/v0/item/${element}.json`,
@@ -64,7 +29,6 @@ export const useStore = defineStore("stories", {
         });
       } catch (e) {
         this.error = `${e}`;
-        console.log(e);
       } finally {
         this.error = "";
       }
@@ -98,10 +62,7 @@ export const useStore = defineStore("stories", {
           const response = await axios.get(
             `https://hacker-news.firebaseio.com/v0/item/${id}.json`,
           );
-          nextTick(
-            // @ts-ignore
-            this.comments.push(response.data),
-          );
+          nextTick(() => this.comments.push(response.data));
         });
       } catch (e) {
         this.error = `${e}`;
