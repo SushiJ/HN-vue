@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
-import { TopStories, NewStories } from "../store";
+import { TopStories, NewStories } from "../types";
 
 const props = defineProps<{
   result: TopStories | NewStories;
 }>();
+
 </script>
 
 <template>

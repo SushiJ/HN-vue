@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
-import { useStore } from "../store";
 import { useRoute } from "vue-router";
 
 type Comment = {
@@ -13,17 +11,17 @@ type Comment = {
 };
 const route = useRoute();
 
-const store = useStore();
-onMounted(() => store.fetchSingleStories(route.params.id as string));
+// const store = useStore();
+// onMounted(() => store.fetchSingleStories(route.params.id as string));
 
-let error = store.error;
+// let error = store.error;
 
-const story = store.singleStory;
-const comments = store.comments as Comment[];
+// const story = store.singleStory;
+// const comments = store.comments as Comment[];
 </script>
 
 <template>
-  <div class="container">
+  <!-- <div class="container">
     <div v-if="error.length > 0">
       <p>An Error Occured {{ error }}</p>
     </div>
@@ -43,7 +41,7 @@ const comments = store.comments as Comment[];
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <style scoped>

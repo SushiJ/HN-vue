@@ -1,11 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
-// @ts-ignore
 import Home from "../views/Home.vue";
-// @ts-ignore
-import Test from "../views/Test.vue";
-// @ts-ignore
 import New from "../views/New.vue";
-// @ts-ignore
 import Single from "../views/Single.vue";
 
 const routes = [
@@ -22,11 +17,6 @@ const routes = [
     path: "/new",
     name: "New",
     component: New,
-  },
-  {
-    path: "/test",
-    name: "Test",
-    component: Test,
   },
 ];
 export const router = createRouter({
