@@ -1,22 +1,19 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
-import { useStore } from "../store";
-import Item from "./Item.vue";
+import Item from "../components/Item.vue";
+import { fetchNewStories } from "../composable/useGetNewStories";
+import { NewStories } from "../types";
 
-const store = useStore();
-let results = store.newStories;
-let error = store.error;
-
-onMounted(() => store.fetchNewStories());
+const { results, status, error } = await fetchNewStories<NewStories>();
 </script>
 
 <template>
   <div class="container">
-    <div v-if="error.length > 0">
+    <div v-if="status === 'LOADING'">Loading...</div>
+    <div v-else-if="status === 'ERROR'">
       <p>An Error Occured {{ error }}</p>
     </div>
     <div v-else>
-      <Item v-for="result in results" :key="result.id" :result="result"></Item>
+      <Item v-for="(result, idx) in results" :key="result.id" :result="result" :idx="idx" />
     </div>
   </div>
 </template>

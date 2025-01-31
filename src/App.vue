@@ -2,8 +2,13 @@
 import Navbar from "./components/Navbar.vue";
 </script>
 <template>
-  <Navbar></Navbar>
-  <RouterView />
+  <Navbar />
+  <Suspense>
+    <RouterView />
+    <template #fallback>
+      Loading...
+    </template>
+  </Suspense>
 </template>
 
 <style>

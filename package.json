@@ -10,13 +10,15 @@
   },
   "dependencies": {
     "axios": "^1.6.0",
-    "pinia": "^2.1.7",
-    "swrv": "^1.0.4",
     "vue": "^3.3.7",
     "vue-router": "^4.2.5"
   },
   "devDependencies": {
+    "@stylistic/eslint-plugin": "^1.6.0",
+    "@stylistic/eslint-plugin-ts": "^1.6.0",
     "@vitejs/plugin-vue": "^4.4.0",
+    "eslint": "^8.56.0",
+    "eslint-plugin-vue": "^9.21.1",
     "typescript": "^5.2.2",
     "vite": "^4.5.0",
     "vue-tsc": "^1.8.22"
