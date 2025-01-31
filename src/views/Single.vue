@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useRoute } from "vue-router";
+import { fetchSingleStories } from "../composable/useGetSingleStories";
 
 type Comment = {
   by: string;
@@ -9,27 +10,24 @@ type Comment = {
   time: number;
   type: string;
 };
-const route = useRoute();
-
-// const store = useStore();
-// onMounted(() => store.fetchSingleStories(route.params.id as string));
-
-// let error = store.error;
-
-// const story = store.singleStory;
-// const comments = store.comments as Comment[];
+const { id } = useRoute().params;
+const { results, status, story, error } = await fetchSingleStories<Comment>(
+  id as string
+);
 </script>
 
 <template>
-  <!-- <div class="container">
-    <div v-if="error.length > 0">
+  <div class="container">
+    <div v-if="status === 'LOADING'">
+      <p>loading...</p>
+    </div>
+    <div v-else-if="status === 'ERROR'">
       <p>An Error Occured {{ error }}</p>
     </div>
     <div v-else>
-      <h2>{{ story.title }}</h2>
-      <p>Score: {{ story.score }}</p>
-      <p>{{ story.url }}</p>
-      <div v-for="comment in comments" :key="comment.time">
+      <p>Score: {{ story?.score }}</p>
+      <a :href="story?.url" target="_blank">{{ story?.url }}</a>
+      <div v-for="comment in results" :key="comment.time">
         <div class="comment-wrap">
           <div class="comment-block">
             <p class="comment-text">{{ comment.text }}</p>
@@ -41,10 +39,14 @@ const route = useRoute();
         </div>
       </div>
     </div>
-  </div> -->
+  </div>
 </template>
 
 <style scoped>
+.container a {
+  margin-bottom: 10px;
+}
+
 .comment-wrap {
   margin-bottom: 1.25rem;
   display: table;

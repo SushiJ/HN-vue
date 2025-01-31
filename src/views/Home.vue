@@ -2,7 +2,7 @@
 import { ref, watch } from "vue";
 import { useTopStories } from "../composable/useTopStories";
 import { FETCH_STATUS, TopStories } from "../types";
-import Item from "./Item.vue";
+import Item from "../components/Item.vue";
 
 const pgNumber = ref(0);
 const resultsPerPage = ref(25);
@@ -40,7 +40,7 @@ watch(
       <p>Loading...</p>
     </div>
     <div v-else>
-      <Item v-for="result in data" :key="result.id" :result="result" />
+      <Item v-for="(result, idx) in data" :key="result.id" :result="result" :idx="idx" />
     </div>
     <div class="interaction">
       <button @click="pgNumber++">more</button>
@@ -66,7 +66,7 @@ button {
   border-radius: 0.25rem;
   cursor: pointer;
 }
-
+ 
 .interaction {
   width: 100%;
   display: flex;

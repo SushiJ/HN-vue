@@ -5,6 +5,9 @@ import Navbar from "./components/Navbar.vue";
   <Navbar />
   <Suspense>
     <RouterView />
+    <template #fallback>
+      Loading...
+    </template>
   </Suspense>
 </template>
 
